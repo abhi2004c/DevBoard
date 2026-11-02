@@ -1,0 +1,52 @@
+{
+  "name": "devboard-desktop",
+  "version": "1.0.0",
+  "description": "DevBoard desktop app",
+  "author": "DevBoard",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env ELECTRON_DEV=1 electron .",
+    "build:web": "npm --prefix ../client run build -- --mode desktop",
+    "dist:win": "npm run build:web && electron-builder --win"
+  },
+  "build": {
+    "appId": "com.devboard.app",
+    "productName": "DevBoard",
+    "files": [
+      "main.js",
+      "preload.js"
+    ],
+    "extraResources": [
+      {
+        "from": "../client/dist",
+        "to": "web"
+      }
+    ],
+    "protocols": [
+      {
+        "name": "DevBoard",
+        "schemes": [
+          "devboard"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.developer-tools"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  }
+}

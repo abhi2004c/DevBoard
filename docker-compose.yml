@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: devboard
+    volumes: [pgdata:/var/lib/postgresql/data]
+  server:
+    build: ./server
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/devboard
+      JWT_SECRET: change-me
+      CLIENT_ORIGIN: http://localhost:8080
+    depends_on: [db]
+    ports: ["4000:4000"]
+  client:
+    build: ./client
+    depends_on: [server]
+    ports: ["8080:80"]
+volumes:
+  pgdata:
